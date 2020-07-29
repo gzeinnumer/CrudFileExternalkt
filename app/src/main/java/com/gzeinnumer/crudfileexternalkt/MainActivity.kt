@@ -18,8 +18,9 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
 
     var permissions = arrayOf(
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,8 @@ class MainActivity : AppCompatActivity() {
                 if (deleteFile()) {
                     enterText.setText("")
                     readText.setText("")
-                    Toast.makeText(this@MainActivity, "Success hapus file", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "Success hapus file", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     Toast.makeText(this@MainActivity, "Gagal hapus file", Toast.LENGTH_SHORT).show()
                 }
@@ -61,19 +63,41 @@ class MainActivity : AppCompatActivity() {
         //untuk android 10, pakai ini
         //android:requestLegacyExternalStorage="true"
         if (checkPermissions()) {
-            val file = File(Environment.getExternalStorageDirectory().toString() + "/CrudFileExternalkt")
+            val file =
+                File(Environment.getExternalStorageDirectory().toString() + "/CrudFileExternalkt")
             if (!file.exists()) {
                 file.mkdirs()
             }
             try {
-                val gpxfile = File(file, "sample.txt")
-                val writer = FileWriter(gpxfile)
-                writer.append(text)
-                writer.flush()
-                writer.close()
+
+                val check = File(
+                    Environment.getExternalStorageDirectory()
+                        .toString() + "/CrudFileExternalkt/sample.txt"
+                )
+                if (!check.exists()) {
+                    val gpxfile = File(file, "sample.txt")
+                    val writer = FileWriter(gpxfile)
+                    writer.append(text + "\n")
+                    writer.flush()
+                    writer.close()
+                } else {
+                    try {
+                        val filename = Environment.getExternalStorageDirectory().toString() + "/CrudFileExternalkt/sample.txt"
+                        val fw = FileWriter(filename, true) //the true will append the new data
+                        fw.write("add a line\n") //appends the string to the file
+                        fw.close()
+                    } catch (ioe: IOException) {
+                        System.err.println("IOException: " + ioe.message)
+                    }
+                }
+
                 Toast.makeText(this@MainActivity, "Saved your text", Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
-                Toast.makeText(this@MainActivity, "Add text to file " + e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Add text to file " + e.message,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         } else {
             Toast.makeText(this, "Beri izin dulu", Toast.LENGTH_SHORT).show()
@@ -82,7 +106,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun readFile(): String {
         var myData = ""
-        val myExternalFile = File(Environment.getExternalStorageDirectory().toString() + "/CrudFileExternalkt", "sample.txt")
+        val myExternalFile = File(
+            Environment.getExternalStorageDirectory().toString() + "/CrudFileExternalkt",
+            "sample.txt"
+        )
         try {
             val fis = FileInputStream(myExternalFile)
             val `in` = DataInputStream(fis)
@@ -99,13 +126,17 @@ class MainActivity : AppCompatActivity() {
             fis.close()
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(this@MainActivity, "Read text to file " + e.message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "Read text to file " + e.message, Toast.LENGTH_SHORT)
+                .show()
         }
         return myData
     }
 
     private fun deleteFile(): Boolean {
-        val file = File(Environment.getExternalStorageDirectory().toString() + "/CrudFileExternalkt", "sample.txt")
+        val file = File(
+            Environment.getExternalStorageDirectory().toString() + "/CrudFileExternalkt",
+            "sample.txt"
+        )
         return file.delete()
     }
 
@@ -122,14 +153,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
         if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toTypedArray(), MULTIPLE_PERMISSIONS)
+            ActivityCompat.requestPermissions(
+                this,
+                listPermissionsNeeded.toTypedArray(),
+                MULTIPLE_PERMISSIONS
+            )
             return false
         }
         return true
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == MULTIPLE_PERMISSIONS) {
             if (grantResults.size > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {

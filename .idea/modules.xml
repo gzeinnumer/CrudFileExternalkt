@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Crud File External kt.iml" filepath="$PROJECT_DIR$/Crud File External kt.iml" group="Crud File External kt" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Crud_File_External_kt.iml" filepath="$PROJECT_DIR$/.idea/modules/Crud_File_External_kt.iml" group="Crud_File_External_kt" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Crud File External kt/app" />
     </modules>
   </component>
